@@ -31,8 +31,10 @@ class RequestHeaderInterceptor : WebGraphQlInterceptor {
     val logger = LoggerFactory.getLogger(this::class.java)
 
     override fun intercept(request: WebGraphQlRequest, chain: WebGraphQlInterceptor.Chain): Mono<WebGraphQlResponse> {
+        logger.info("${request.operationName}, ${request.headers}")
+        logger.info("${request.operationName}, ${request.variables}")
+
         request.configureExecutionInput { executionInput: ExecutionInput?, builder: ExecutionInput.Builder ->
-            logger.info("${executionInput?.operationName}, ${executionInput?.variables}")
             builder.graphQLContext(
                 mapOf(
                     "locale" to executionInput?.locale,
