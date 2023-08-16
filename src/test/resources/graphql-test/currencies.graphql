@@ -1,0 +1,6 @@
+query currencies {
+    currencies {
+        code
+        name
+    }
+}
