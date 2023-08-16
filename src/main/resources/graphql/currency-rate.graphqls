@@ -13,4 +13,5 @@ type Currency {
 
 input CurrencyRatesInput {
     targetCurrencyCode: String
+    date: Date
 }

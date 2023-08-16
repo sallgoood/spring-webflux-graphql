@@ -41,7 +41,11 @@ class CurrencyController(
         currency: Currency,
         @Argument input: CurrencyRatesInput?,
     ): Map<String, Any?>? {
-        val rates = rateService.getCurrencyRate(currency.code, input?.targetCurrencyCode)
+        val rates = rateService.getCurrencyRate(
+            sourceCurrencyCode = currency.code,
+            targetCurrencyCode = input?.targetCurrencyCode,
+            date = input?.date,
+        )
         return rates.data
     }
 }

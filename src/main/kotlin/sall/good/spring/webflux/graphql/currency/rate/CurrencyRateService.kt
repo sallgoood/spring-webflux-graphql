@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
+import java.time.LocalDate
 
 @Service
 class CurrencyRateService(
@@ -30,11 +31,13 @@ class CurrencyRateService(
     suspend fun getCurrencyRate(
         sourceCurrencyCode: String,
         targetCurrencyCode: String? = null,
+        date: LocalDate? = null,
     ): ExternalServiceResponse<Map<String, Any?>, Map<String, String>> {
+        val dateRequest = date?.let { "$date" } ?: "latest"
         val request =
             targetCurrencyCode?.let { "$sourceCurrencyCode/$targetCurrencyCode.json" } ?: "$sourceCurrencyCode.json"
         return currencyRateClient.get()
-            .uri("/gh/fawazahmed0/currency-api@1/latest/currencies/$request")
+            .uri("/gh/fawazahmed0/currency-api@1/$dateRequest/currencies/$request")
             .exchangeToMono { res ->
                 val success = res.statusCode().is2xxSuccessful
                 res.bodyToMono(Any::class.java)
