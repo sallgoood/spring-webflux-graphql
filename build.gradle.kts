@@ -1,3 +1,4 @@
+import com.graphql_java_generator.plugin.conf.CustomScalarDefinition
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -35,6 +36,7 @@ dependencies {
 	implementation("com.graphql-java-generator:graphql-java-server-runtime:2.2")
 	implementation("com.graphql-java-generator:graphql-java-client-runtime:2.2")
 	implementation("com.graphql-java-generator:graphql-java-common-runtime:2.2")
+	implementation("com.graphql-java:graphql-java-extended-scalars:20.2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -50,6 +52,15 @@ tasks.withType<Test> {
 
 generatePojoConf {
 	setSchemaFileFolder("src/main/resources/graphql")
+	setCustomScalars(arrayOf(
+		CustomScalarDefinition(
+			"JSON",
+			"java.util.Map",
+			null,
+			"graphql.scalars.ExtendedScalars.Json",
+			null,
+		)
+	))
 }
 
 
@@ -60,4 +71,12 @@ sourceSets {
 			srcDirs("$buildDir/generated/resources/graphqlGradlePlugin")
 		}
 	}
+}
+
+tasks.compileKotlin {
+	dependsOn("generatePojo")
+}
+
+tasks.compileJava {
+	dependsOn("generatePojo")
 }
