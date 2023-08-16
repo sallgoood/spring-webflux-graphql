@@ -1,6 +1,7 @@
 package sall.good.spring.webflux.graphql.currency
 
 import com.generated.graphql.Currency
+import com.generated.graphql.CurrencyInput
 import com.generated.graphql.CurrencyRatesInput
 import org.slf4j.LoggerFactory
 import org.springframework.graphql.data.method.annotation.Argument
@@ -21,17 +22,19 @@ class CurrencyController(
     @QueryMapping
     suspend fun currencies(
         @ContextValue locale: Locale? = null,
+        @Argument input: CurrencyInput? = null,
     ): List<Currency> {
         logger.info("locale, $locale")
         val getCurrencies = rateService.getCurrencies()
         if (getCurrencies.hasError()) throw IllegalStateException("getCurrencies error")
         val currencies = getCurrencies.data?.let {
-            it.map { (code, name) ->
-                Currency.builder()
-                    .withCode(code)
-                    .withName(name)
-                    .build()
-            }
+            it.filter { currency -> if (input?.sourceCurrencyCode == null) true else currency.key == input.sourceCurrencyCode }
+                .map { (code, name) ->
+                    Currency.builder()
+                        .withCode(code)
+                        .withName(name)
+                        .build()
+                }
         } ?: emptyList()
         return currencies
     }

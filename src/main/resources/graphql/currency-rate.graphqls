@@ -1,5 +1,7 @@
 type Query {
-    currencies: [Currency!]!
+    currencies(
+        input: CurrencyInput
+    ): [Currency!]!
 }
 
 type Currency {
@@ -9,6 +11,10 @@ type Currency {
     rates(
         input: CurrencyRatesInput
     ): JSON
+}
+
+input CurrencyInput {
+    sourceCurrencyCode: String
 }
 
 input CurrencyRatesInput {
