@@ -20,6 +20,7 @@ class ServerConfig {
     fun runtimeWiringConfigurer(): RuntimeWiringConfigurer? {
         return RuntimeWiringConfigurer { wiringBuilder: RuntimeWiring.Builder ->
             wiringBuilder.scalar(ExtendedScalars.Json)
+                .scalar(ExtendedScalars.Date)
         }
     }
 }

@@ -59,6 +59,13 @@ generatePojoConf {
 			null,
 			"graphql.scalars.ExtendedScalars.Json",
 			null,
+		),
+		CustomScalarDefinition(
+			"Date",
+			"java.time.LocalDate",
+			null,
+			"graphql.scalars.ExtendedScalars.Date",
+			null,
 		)
 	))
 }
