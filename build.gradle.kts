@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.2"
 	kotlin("jvm") version "1.8.22"
 	kotlin("plugin.spring") version "1.8.22"
+	id("com.graphql-java-generator.graphql-gradle-plugin3") version "2.2"
 }
 
 group = "sall.good"
@@ -31,6 +32,9 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("io.projectreactor:reactor-test")
 	testImplementation("org.springframework.graphql:spring-graphql-test")
+	implementation("com.graphql-java-generator:graphql-java-server-runtime:2.2")
+	implementation("com.graphql-java-generator:graphql-java-client-runtime:2.2")
+	implementation("com.graphql-java-generator:graphql-java-common-runtime:2.2")
 }
 
 tasks.withType<KotlinCompile> {
@@ -42,4 +46,18 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+generatePojoConf {
+	setSchemaFileFolder("src/main/resources/graphql")
+}
+
+
+sourceSets {
+	main {
+		java {
+			srcDirs("$buildDir/generated/sources/graphqlGradlePlugin")
+			srcDirs("$buildDir/generated/resources/graphqlGradlePlugin")
+		}
+	}
 }
