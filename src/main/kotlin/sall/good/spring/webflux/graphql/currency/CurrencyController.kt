@@ -1,13 +1,15 @@
 package sall.good.spring.webflux.graphql.currency
 
 import com.generated.graphql.Currency
+import com.generated.graphql.CurrencyRatesInput
 import org.slf4j.LoggerFactory
+import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.ContextValue
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.graphql.data.method.annotation.SchemaMapping
 import org.springframework.stereotype.Controller
 import sall.good.spring.webflux.graphql.currency.rate.CurrencyRateService
-import java.util.Locale
+import java.util.*
 
 @Controller
 class CurrencyController(
@@ -35,8 +37,11 @@ class CurrencyController(
     }
 
     @SchemaMapping(typeName = "Currency", field = "rates")
-    suspend fun currencyRates(currency: Currency): Map<String, Any?>? {
-        val rates = rateService.getCurrencyRate(currency.code)
+    suspend fun currencyRates(
+        currency: Currency,
+        @Argument input: CurrencyRatesInput?,
+    ): Map<String, Any?>? {
+        val rates = rateService.getCurrencyRate(currency.code, input?.targetCurrencyCode)
         return rates.data
     }
 }

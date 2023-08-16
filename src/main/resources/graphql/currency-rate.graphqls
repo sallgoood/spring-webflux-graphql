@@ -6,5 +6,11 @@ type Currency {
     code: String!
     name: String!
 
-    rates: JSON
+    rates(
+        input: CurrencyRatesInput
+    ): JSON
+}
+
+input CurrencyRatesInput {
+    targetCurrencyCode: String
 }

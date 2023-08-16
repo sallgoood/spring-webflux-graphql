@@ -27,9 +27,14 @@ class CurrencyRateService(
             }.awaitSingle()
     }
 
-    suspend fun getCurrencyRate(currencyCode: String): ExternalServiceResponse<Map<String, Any?>, Map<String, String>> {
+    suspend fun getCurrencyRate(
+        sourceCurrencyCode: String,
+        targetCurrencyCode: String? = null,
+    ): ExternalServiceResponse<Map<String, Any?>, Map<String, String>> {
+        val request =
+            targetCurrencyCode?.let { "$sourceCurrencyCode/$targetCurrencyCode.json" } ?: "$sourceCurrencyCode.json"
         return currencyRateClient.get()
-            .uri("/gh/fawazahmed0/currency-api@1/latest/currencies/$currencyCode.json")
+            .uri("/gh/fawazahmed0/currency-api@1/latest/currencies/$request")
             .exchangeToMono { res ->
                 val success = res.statusCode().is2xxSuccessful
                 res.bodyToMono(Any::class.java)
