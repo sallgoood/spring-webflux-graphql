@@ -15,25 +15,20 @@ class CurrencyRateService(
 
     val currencyTypeRefer = object : ParameterizedTypeReference<Map<String, String>>() {}
     val currencyErrorTypeRefer = object : ParameterizedTypeReference<Map<String, String>>() {}
+
     suspend fun getCurrencies(): ExternalServiceResponse<Map<String, String>, Map<String, String>> {
         return currencyRateClient.get()
             .uri("/gh/fawazahmed0/currency-api@1/latest/currencies.json")
             .exchangeToMono { res ->
-                if (res.statusCode().is2xxSuccessful) {
-                    res.bodyToMono(currencyTypeRefer)
-                        .map {
-                            ExternalServiceResponse<Map<String, String>, Map<String, String>>(
-                                data = it,
-                            )
-                        }
-                } else {
-                    res.bodyToMono(currencyErrorTypeRefer)
-                        .map {
-                            ExternalServiceResponse<Map<String, String>, Map<String, String>>(
-                                error = it,
-                            )
-                        }
-                }
+                val success = res.statusCode().is2xxSuccessful
+                val typeRefer = if (success) currencyTypeRefer else currencyErrorTypeRefer
+                res.bodyToMono(typeRefer)
+                    .map {
+                        ExternalServiceResponse(
+                            data = if (success) it else null,
+                            error = if (!success) it else null,
+                        )
+                    }
             }.awaitSingle()
     }
 }
