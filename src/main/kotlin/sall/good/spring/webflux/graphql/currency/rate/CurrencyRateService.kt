@@ -3,7 +3,6 @@ package sall.good.spring.webflux.graphql.currency.rate
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.ParameterizedTypeReference
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
@@ -13,20 +12,31 @@ class CurrencyRateService(
     private val currencyRateClient: WebClient,
 ) {
 
-    val currencyTypeRefer = object : ParameterizedTypeReference<Map<String, String>>() {}
-    val currencyErrorTypeRefer = object : ParameterizedTypeReference<Map<String, String>>() {}
-
     suspend fun getCurrencies(): ExternalServiceResponse<Map<String, String>, Map<String, String>> {
         return currencyRateClient.get()
             .uri("/gh/fawazahmed0/currency-api@1/latest/currencies.json")
             .exchangeToMono { res ->
                 val success = res.statusCode().is2xxSuccessful
-                val typeRefer = if (success) currencyTypeRefer else currencyErrorTypeRefer
-                res.bodyToMono(typeRefer)
+                res.bodyToMono(Any::class.java)
                     .map {
                         ExternalServiceResponse(
-                            data = if (success) it else null,
-                            error = if (!success) it else null,
+                            data = if (success) it as Map<String, String> else null,
+                            error = if (!success) it as Map<String, String> else null,
+                        )
+                    }
+            }.awaitSingle()
+    }
+
+    suspend fun getCurrencyRate(currencyCode: String): ExternalServiceResponse<Map<String, Any?>, Map<String, String>> {
+        return currencyRateClient.get()
+            .uri("/gh/fawazahmed0/currency-api@1/latest/currencies/$currencyCode.json")
+            .exchangeToMono { res ->
+                val success = res.statusCode().is2xxSuccessful
+                res.bodyToMono(Any::class.java)
+                    .map {
+                        ExternalServiceResponse(
+                            data = if (success) it as Map<String, Any?> else null,
+                            error = if (!success) it as Map<String, String> else null,
                         )
                     }
             }.awaitSingle()

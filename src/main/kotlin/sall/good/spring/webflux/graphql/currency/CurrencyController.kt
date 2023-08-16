@@ -24,9 +24,11 @@ class CurrencyController(
         if (getCurrencies.hasError()) throw IllegalStateException("getCurrencies error")
         val currencies = getCurrencies.data?.let {
             it.map { (code, name) ->
+                val rates = rateService.getCurrencyRate(code)
                 Currency.builder()
                     .withCode(code)
                     .withName(name)
+                    .withRates(rates.data)
                     .build()
             }
         } ?: emptyList()

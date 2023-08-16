@@ -5,4 +5,6 @@ type Query {
 type Currency {
     code: String!
     name: String!
+
+    rates: JSON
 }
