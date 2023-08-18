@@ -15,3 +15,11 @@ spring:
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+server:
+  shutdown: graceful
+  compression:
+    enabled: true
+  error:
+    whitelabel:
+      enabled: false
+  forward-headers-strategy: framework
