@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
-//	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+	implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
 	implementation("org.springframework.boot:spring-boot-starter-graphql")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -37,6 +37,9 @@ dependencies {
 	implementation("com.graphql-java-generator:graphql-java-client-runtime:2.2")
 	implementation("com.graphql-java-generator:graphql-java-common-runtime:2.2")
 	implementation("com.graphql-java:graphql-java-extended-scalars:20.2")
+	runtimeOnly("org.postgresql:r2dbc-postgresql:1.0.2.RELEASE")
+	runtimeOnly("org.postgresql:postgresql:42.6.0")
+	runtimeOnly("org.liquibase:liquibase-core:4.23.1")
 }
 
 tasks.withType<KotlinCompile> {

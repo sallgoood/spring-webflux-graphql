@@ -2,6 +2,16 @@ spring:
   graphql:
     graphiql:
       enabled: true
+  r2dbc:
+    username: local
+    password: local
+    url: r2dbc:postgresql://localhost:8082/flyway-test-db
+  liquibase:
+    url: jdbc:postgresql://localhost:8082/flyway-test-db
+    change-log: classpath:database/postgres/changelog.sql
+    enabled: true
+    user: local
+    password: local
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
