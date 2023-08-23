@@ -1,5 +1,7 @@
 package sall.good.spring.webflux.graphql
 
+import com.querydsl.sql.PostgreSQLTemplates
+import com.querydsl.sql.SQLTemplates
 import graphql.ExecutionInput
 import graphql.scalars.ExtendedScalars
 import graphql.schema.idl.RuntimeWiring
@@ -22,6 +24,11 @@ class ServerConfig {
             wiringBuilder.scalar(ExtendedScalars.Json)
                 .scalar(ExtendedScalars.Date)
         }
+    }
+
+    @Bean
+    fun postgreSQLTemplates(): SQLTemplates {
+        return PostgreSQLTemplates()
     }
 }
 
