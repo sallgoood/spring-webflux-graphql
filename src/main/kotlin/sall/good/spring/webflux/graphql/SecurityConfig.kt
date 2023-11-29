@@ -7,13 +7,13 @@ import org.springframework.security.web.server.SecurityWebFilterChain
 
 @Configuration
 class SecurityConfig {
-    @Bean
-    fun filterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
-        return http
-            .csrf { it.disable() }
-            .authorizeExchange {
-                it.anyExchange().permitAll()
-            }
-            .build()
-    }
+  @Bean
+  fun filterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
+    return http
+      .csrf { it.disable() }
+      .authorizeExchange {
+        it.anyExchange().permitAll()
+      }
+      .build()
+  }
 }

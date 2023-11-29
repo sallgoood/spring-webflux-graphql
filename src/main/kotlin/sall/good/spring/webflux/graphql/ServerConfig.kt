@@ -15,39 +15,38 @@ import org.springframework.graphql.server.WebGraphQlResponse
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
-
 @Configuration
 class ServerConfig {
-    @Bean
-    fun runtimeWiringConfigurer(): RuntimeWiringConfigurer? {
-        return RuntimeWiringConfigurer { wiringBuilder: RuntimeWiring.Builder ->
-            wiringBuilder.scalar(ExtendedScalars.Json)
-                .scalar(ExtendedScalars.Date)
-        }
+  @Bean
+  fun runtimeWiringConfigurer(): RuntimeWiringConfigurer? {
+    return RuntimeWiringConfigurer { wiringBuilder: RuntimeWiring.Builder ->
+      wiringBuilder.scalar(ExtendedScalars.Json)
+        .scalar(ExtendedScalars.Date)
     }
+  }
 
-    @Bean
-    fun postgreSQLTemplates(): SQLTemplates {
-        return PostgreSQLTemplates()
-    }
+  @Bean
+  fun postgreSQLTemplates(): SQLTemplates {
+    return PostgreSQLTemplates()
+  }
 }
 
 @Component
 class RequestHeaderInterceptor : WebGraphQlInterceptor {
 
-    val logger = LoggerFactory.getLogger(this::class.java)
+  val logger = LoggerFactory.getLogger(this::class.java)
 
-    override fun intercept(request: WebGraphQlRequest, chain: WebGraphQlInterceptor.Chain): Mono<WebGraphQlResponse> {
-        logger.info("${request.operationName}, ${request.headers}")
-        logger.info("${request.operationName}, ${request.variables}")
+  override fun intercept(request: WebGraphQlRequest, chain: WebGraphQlInterceptor.Chain): Mono<WebGraphQlResponse> {
+    logger.info("${request.operationName}, ${request.headers}")
+    logger.info("${request.operationName}, ${request.variables}")
 
-        request.configureExecutionInput { executionInput: ExecutionInput?, builder: ExecutionInput.Builder ->
-            builder.graphQLContext(
-                mapOf(
-                    "locale" to executionInput?.locale,
-                )
-            ).build()
-        }
-        return chain.next(request)
+    request.configureExecutionInput { executionInput: ExecutionInput?, builder: ExecutionInput.Builder ->
+      builder.graphQLContext(
+        mapOf(
+          "locale" to executionInput?.locale,
+        ),
+      ).build()
     }
+    return chain.next(request)
+  }
 }

@@ -7,10 +7,10 @@ import sall.good.spring.webflux.graphql.currency.rate.CurrencyRateTable.Companio
 
 @Table(TABLE_NAME)
 data class CurrencyRateTable @PersistenceCreator constructor(
-    @Id
-    var id: String? = null,
+  @Id
+  var id: String? = null,
 ) {
-    companion object {
-        const val TABLE_NAME = "currency_rates"
-    }
+  companion object {
+    const val TABLE_NAME = "currency_rates"
+  }
 }

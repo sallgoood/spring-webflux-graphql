@@ -16,14 +16,14 @@ import sall.good.spring.webflux.graphql.currency.rate.CurrencyRateServiceConfig
 @ImportAutoConfiguration(WebClientAutoConfiguration::class)
 class CurrencyControllerTest {
 
-    @Autowired
-    lateinit var tester: GraphQlTester
+  @Autowired
+  lateinit var tester: GraphQlTester
 
-    @Test
-    fun shouldGetAllCurrencies() {
-        tester.documentName("currencies")
-            .execute()
-            .path("currencies")
-            .hasValue()
-    }
+  @Test
+  fun shouldGetAllCurrencies() {
+    tester.documentName("currencies")
+      .execute()
+      .path("currencies")
+      .hasValue()
+  }
 }
