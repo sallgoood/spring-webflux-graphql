@@ -5,9 +5,9 @@ spring:
   r2dbc:
     username: local
     password: local
-    url: r2dbc:postgresql://localhost:8082/flyway-test-db
+    url: r2dbc:postgresql://localhost:8082/test-db
   liquibase:
-    url: jdbc:postgresql://localhost:8082/flyway-test-db
+    url: jdbc:postgresql://localhost:8082/test-db
     change-log: classpath:database/postgres/changelog.sql
     enabled: true
     user: local
