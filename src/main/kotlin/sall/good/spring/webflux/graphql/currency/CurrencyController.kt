@@ -31,8 +31,8 @@ class CurrencyController(
             it.filter { currency -> if (input?.sourceCurrencyCode == null) true else currency.key == input.sourceCurrencyCode }
                 .map { (code, name) ->
                     Currency.builder()
-                        .withCode(code)
-                        .withName(name)
+                        .setCode(code)
+                        .setName(name)
                         .build()
                 }
         } ?: emptyList()
